@@ -4,12 +4,14 @@ public class Node {
    private Node parent , rightChild , leftChild;
    private String wordData;
    private int color;
-   final int BLACK_COLOR = 0;
-   final int RED_COLOR = 1;
+   public static final int BLACK_COLOR = 0;
+   public static final int RED_COLOR = 1;
 
     public Node(String wordData) {
         this.wordData = wordData;
         this.color = RED_COLOR;
+       // this.leftChild = null;
+       // this.rightChild = null;
     }
 
     public Node getParent() {

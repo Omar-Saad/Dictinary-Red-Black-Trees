@@ -146,10 +146,5 @@ public class RedBlackTree {
 
     }
 
-    int getTreeSize(){
-        int size = 0;
-        /*TODO return number of elements in the tree*/
-        return size;
 
-    }
 }

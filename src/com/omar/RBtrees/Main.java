@@ -31,7 +31,16 @@ public class Main {
             System.out.println("4 - Look-up a word from the Dictionary");
             System.out.println("5 - End the program");
             System.out.print("Enter your choice : ");
-            choice = new Scanner(System.in).nextInt();
+            try {
+                choice = new Scanner(System.in).nextInt();
+
+
+            }
+            catch (Exception e){
+                System.out.println("Wrong Input please try again !");
+                continue;
+
+            }
 
                 switch (choice){
                     case 1:
@@ -53,7 +62,7 @@ public class Main {
                     case 4:
                         System.out.print("Enter Word you want to Look-up : ");
                         String searchWord = new Scanner(System.in).nextLine();
-                        if(tree.search(searchWord))
+                        if(tree.search(tree.getRoot(),searchWord))
                             System.out.println("YES Word is found ");
                         else {
                             System.out.println("NO Word is not found");
@@ -95,7 +104,7 @@ public class Main {
     }
 
     private static boolean insertWordToRB(String data , RedBlackTree tree){
-        if(!tree.search(data)) {
+        if(!tree.search(tree.getRoot(),data)) {
             tree.insert(data);
             return true;
         }

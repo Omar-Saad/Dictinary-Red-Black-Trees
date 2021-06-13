@@ -15,16 +15,16 @@ public class RedBlackTree {
     private Node insertToTree(Node root, Node newNode) {
         if(root==null)
             return newNode;
-        else if(root.getWordData().compareToIgnoreCase(newNode.getWordData()) > 0){
+        else if(newNode.getWordData().compareToIgnoreCase(root.getWordData()) > 0){
             root.setRightChild(insertToTree(root.getRightChild() , newNode));
             root.getRightChild().setParent(root);
         }
-        else if(root.getWordData().compareToIgnoreCase(newNode.getWordData()) < 0){
+        else if(newNode.getWordData().compareToIgnoreCase(root.getWordData()) < 0){
             root.setLeftChild(insertToTree(root.getLeftChild() , newNode));
             root.getLeftChild().setParent(root);
         }
 
-        return newNode;
+        return root;
     }
 
     private void fixInsertedNode(Node newNode) {
@@ -135,9 +135,22 @@ public class RedBlackTree {
         newNode.setParent(temp);
     }
 
-    boolean search(String data){
-        /*TODO Search for string and return true if found */
-        return true;
+    boolean search(Node root , String data){
+        if(root==null){
+            return false;
+        }
+        if(data.compareToIgnoreCase(root.getWordData())==0 ){
+            return true;
+        }
+        else if(data.compareToIgnoreCase(root.getWordData())>0 ) {
+            return  search(root.getRightChild(),data);
+        }
+        else if (data.compareToIgnoreCase(root.getWordData())<0 ){
+            return search(root.getLeftChild(),data);
+        }
+        return false;
+
+
     }
     int getTreeHeight(){
         int height = 0;
@@ -146,5 +159,11 @@ public class RedBlackTree {
 
     }
 
+    public Node getRoot() {
+        return root;
+    }
 
+    public void setRoot(Node root) {
+        this.root = root;
+    }
 }

@@ -27,72 +27,83 @@ public class RedBlackTree {
         return root;
     }
 
-    private void fixInsertedNode(Node newNode) {
-        Node parentNode , grandParentNode , uncle= null;
 
-        while (newNode!=root && newNode.getColor() != Node.BLACK_COLOR
-                && newNode.getParent().getColor() == Node.RED_COLOR)
-        {
-            parentNode = newNode.getParent();
-            grandParentNode = newNode.getParent().getParent();
+    public void fixInsertedNode(Node newNode) {
+        Node uncle = null;
 
-            if(parentNode == grandParentNode.getLeftChild()){
-                uncle = grandParentNode.getRightChild();
-
-                if(uncle!=null && uncle.getColor() == Node.RED_COLOR){
-                    //case 1 =>> Recolor
-                    recolor(grandParentNode , parentNode , uncle , newNode);
-
-                }
-                else { //Uncle is black
-                    if(newNode == parentNode.getRightChild()){
-                        //Case 2 Node is right child => Left rotate
-                        rotateLeft(parentNode);
-                        newNode = parentNode;
-                        parentNode = newNode.getParent();
-                    }
-
-                    rotateRight(grandParentNode);
-                    int tempColor = parentNode.getColor();
-                    parentNode.setColor(grandParentNode.getColor());
-                    grandParentNode.setColor(tempColor);
-                    newNode = parentNode;
-
-                }
-            } else { //Parent is right child
-                uncle = grandParentNode.getLeftChild();
-
-                if(uncle!=null && uncle.getColor() == Node.RED_COLOR)
-                    //case 1 =>> Recolor
-                    recolor(grandParentNode , parentNode , uncle , newNode);
-                else {
-                    if(newNode == parentNode.getLeftChild()){
-                        rotateRight(parentNode);
-                        newNode = parentNode;
-                        parentNode = newNode.getParent();
-                    }
-                    rotateLeft(grandParentNode);
-                    int tempColor = parentNode.getColor();
-                    parentNode.setColor(grandParentNode.getColor());
-                    grandParentNode.setColor(tempColor);
-                    newNode = parentNode;
-                }
-
-                }
-
+        if (root == newNode) {
+            root.setColor( Node.BLACK_COLOR);
         }
+        else if (newNode.getParent().getColor() != Node.BLACK_COLOR) {
 
-        if(root.getColor() != Node.BLACK_COLOR)
-            root.setColor(Node.BLACK_COLOR);
+            if (newNode.getParent().getParent() != null) {
 
-    }
+                if (newNode.getParent().getParent().getLeftChild() == newNode.getParent()) {
+                    uncle = newNode.getParent().getParent().getRightChild();
+                } else
+                    uncle = newNode.getParent().getParent().getLeftChild();
+            }
+            if (newNode.getColor() == newNode.getParent().getColor()) { // parent and child red
 
-    private void recolor(Node grandParentNode , Node parentNode , Node uncle , Node newNode){
-        //case 1 =>> Recolor
-        uncle.setColor(Node.BLACK_COLOR);
-        parentNode.setColor(Node.BLACK_COLOR);
-        grandParentNode.setColor(Node.RED_COLOR);
-        newNode = grandParentNode;
+                if (uncle != null) { // case 1 or 2 or 3
+
+                    if (newNode.getColor() == uncle.getColor()) { //case 1 uncle is red
+                        newNode.getParent().setColor( Node.BLACK_COLOR);
+                        uncle.setColor(Node.BLACK_COLOR);
+                        newNode.getParent().getParent().setColor(Node.RED_COLOR);
+                        fixInsertedNode(newNode.getParent().getParent());
+                    } else {
+                        if(newNode.getParent() == newNode.getParent().getParent().getLeftChild()) {
+
+                            if (newNode == newNode.getParent().getRightChild())// case 2 =>rotate left
+                            {
+                                newNode = newNode.getParent();
+                                rotateLeft(newNode);
+                            }
+                            newNode.getParent().setColor(Node.BLACK_COLOR);
+                            newNode.getParent().getParent().setColor(Node.RED_COLOR);
+                            rotateRight(newNode.getParent().getParent());
+                        }
+                        else if (newNode.getParent() == newNode.getParent().getParent().getRightChild()){ //case 2 => rotate right
+
+                            if ( newNode == newNode.getParent().getLeftChild() ) {
+                                newNode = newNode.getParent();
+                                rotateRight(newNode);
+                            }
+
+                            // recolor than rotate left
+                            newNode.getParent().setColor(Node.BLACK_COLOR);
+                            newNode.getParent().getParent().setColor(Node.RED_COLOR);
+                            rotateLeft(newNode.getParent().getParent());
+                        }
+                    }
+
+                } else { //Uncle is null => Uncle is black (NILL)
+                    if ((newNode.getParent() == newNode.getParent().getParent().getLeftChild()))
+                    {
+                        if(newNode == newNode.getParent().getRightChild()){
+                            newNode = newNode.getParent();
+                            rotateLeft(newNode);
+                        }
+
+                        newNode.getParent().setColor(Node.BLACK_COLOR);
+                        newNode.getParent().getParent().setColor(Node.RED_COLOR);
+                        rotateRight(newNode.getParent().getParent());
+                    } else if(newNode.getParent() == newNode.getParent().getParent().getRightChild()){
+
+                        if ( newNode == newNode.getParent().getLeftChild() ) {
+                            newNode = newNode.getParent();
+                            rotateRight(newNode);
+                        }
+
+                        newNode.getParent().setColor(Node.BLACK_COLOR);
+                        newNode.getParent().getParent().setColor(Node.RED_COLOR);
+                        rotateLeft(newNode.getParent().getParent());
+                    }
+                }
+            }
+        }
+        root.setColor(Node.BLACK_COLOR);
     }
 
     private void rotateRight(Node newNode){
@@ -152,10 +163,10 @@ public class RedBlackTree {
 
 
     }
-    int getTreeHeight(){
-        int height = 0;
-        /*TODO return tree height*/
-        return height;
+    int getTreeHeight(Node root){
+        if (root == null) return -1;
+        else
+            return  1 + Math.max(getTreeHeight(root.getLeftChild()), getTreeHeight(root.getRightChild()));
 
     }
 
@@ -166,4 +177,6 @@ public class RedBlackTree {
     public void setRoot(Node root) {
         this.root = root;
     }
+
+
 }

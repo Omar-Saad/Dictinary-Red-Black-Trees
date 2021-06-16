@@ -15,7 +15,7 @@ public class Main {
         size = LoadFromFileToRB("EN-US-Dictionary.txt" , tree);
         System.out.println("Dictionary Loaded successfully");
         System.out.println("Size of the tree after Load : "+size);
-        System.out.println("Height of the tree after Load : "+tree.getTreeHeight()); //TODO
+        System.out.println("Height of the tree after Load : "+tree.getTreeHeight(tree.getRoot())); //TODO
 
 
 
@@ -47,13 +47,18 @@ public class Main {
                         System.out.println("Size of the tree is : "+size);
                         break;
                     case 2:
-                        System.out.println("Height of the tree is : "+tree.getTreeHeight());
+                        System.out.println("Height of the tree is : "+tree.getTreeHeight(tree.getRoot()));
                         break;
                     case 3:
                         System.out.print("Enter Word you want to insert : ");
                         String word = new Scanner(System.in).nextLine();
-                        if(insertWordToRB(word , tree))
+                        if(insertWordToRB(word , tree)) {
+                            size++;
                             System.out.println("Word Inserted Successfully ");
+                            System.out.println("Size of the tree is : "+size);
+                            System.out.println("Height of the tree is : " + tree.getTreeHeight(tree.getRoot()));
+
+                        }
                         else {
                             System.out.println("ERROR: Word already in the dictionary!");
 
